@@ -1,0 +1,7 @@
+---
+name: Common Components
+description:
+  Initial components
+
+variables:
+  base_url: "http://192.168.0.2:8080/api/v3"
