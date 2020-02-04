@@ -5,8 +5,7 @@ This solution provides a way to automate API tests.
 
 #### Prerequisites
 ##### 1. Docker and docker compose should be installed
-#
-#
+
 #### Steps to run
 1. Clone the [Swagger petstore](https://github.com/swagger-api/swagger-petstore) repository.
 2. Run the server with Maven , using this command -
