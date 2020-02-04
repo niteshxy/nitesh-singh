@@ -4,4 +4,5 @@ description:
   Initial components
 
 variables:
-  base_url: "http://192.168.0.2:8080/api/v3"
+  #Replace the ip of this base_url to the ip of your machine where swagger-petstore server is running
+  base_url: "http://192.168.1.5:8080/api/v3"

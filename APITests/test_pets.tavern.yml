@@ -1,0 +1,93 @@
+---
+test_name: Test the /findByStatus GET request
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Check /findByStatus GET request
+    request:
+      method: GET
+      url: "{base_url}/pet/findByStatus"
+      params:
+        status: available
+    response:
+      status_code: 200
+
+
+---
+test_name: Test /pet POST request
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Test the /pet POST request
+    request:
+      method: POST
+      url: "{base_url}/pet"
+      json:
+        id: 10
+        name: doggie
+        category:
+          id: 1
+          name: Dogs
+        photoUrls:
+          - string
+        tags:
+          - id: 0
+            name: string
+        status: available
+    response:
+      status_code: 200
+      body:
+        id: !int "{tavern.request_vars.json.id}"
+        category:
+          id: !int "{tavern.request_vars.json.category.id}"
+          name: "{tavern.request_vars.json.category.name}"
+        name: "{tavern.request_vars.json.name}"
+        photoUrls:
+          - !anystr
+        tags:
+          - id: !anyint
+            name: !anystr
+        status: !anystr
+---
+test_name: Test /pet request
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Check the /pet GET request to find pet by ID
+    request:
+      method: GET
+      url: "{base_url}/pet/10"
+      params:
+        status: available
+    response:
+      status_code: 200
+      body: !include testdata_Pet.json
+
+
+  - name: Check the /pet DELETE request to delete pet by ID
+    request:
+      method: DELETE
+      url: "{base_url}/pet/10"
+    response:
+      status_code: 200
+
+  - name: Check /pet GET request with deleted pet id
+    request:
+      method: GET
+      url: "{base_url}/pet/10"
+      params:
+        status: available
+    response:
+      status_code: 404
+
+  - name: Check /pet GET request with invalid pet id
+    request:
+      method: GET
+      url: "{base_url}/pet/s"
+      params:
+        status: available
+    response:
+      status_code: 400

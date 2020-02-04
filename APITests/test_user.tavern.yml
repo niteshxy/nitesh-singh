@@ -1,0 +1,65 @@
+---
+test_name: Test user endpoint
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Test the /user POST request to create a user
+    request:
+      method: POST
+      url: "{base_url}/user"
+      json: !include testdata_User.json
+    response:
+      status_code: 200
+      body: !include testdata_User.json
+
+---
+test_name: Test user endpoint login and logout
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Test the /login GET request
+    request:
+      method: GET
+      url: "{base_url}/user/login"
+      params:
+        username: theUser
+        password: 12345
+    response:
+      status_code: 200
+
+  - name: Test the /logout GET request
+    request:
+      method: GET
+      url: "{base_url}/user/logout"
+    response:
+      status_code: 200
+
+---
+test_name: Test /user request
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Test the /user GET request to get user by username
+    request:
+      method: GET
+      url: "{base_url}/user/theUser"
+    response:
+      status_code: 200
+      body: !include testdata_User.json
+
+  - name: Test the /user DELETE request to delete user by username
+    request:
+      method: DELETE
+      url: "{base_url}/user/theUser"
+    response:
+      status_code: 200
+
+  - name: Test the /user GET request for deleted user
+    request:
+      method: GET
+      url: "{base_url}/user/theUser"
+    response:
+      status_code: 404

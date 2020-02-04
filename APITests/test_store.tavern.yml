@@ -1,0 +1,49 @@
+---
+test_name: Test store endpoint
+includes:
+  - !include common.yaml
+
+stages:
+  - name: Test the /inventory GET request
+    request:
+      method: GET
+      url: "{base_url}/store/inventory"
+    response:
+      status_code: 200
+      body:
+        approved: !anyint
+        placed: !anyint
+        delivered: !anyint
+
+  - name: Test the /order POST request
+    request:
+      method: POST
+      url: "{base_url}/store/order"
+      json: !include testdata_StoreOrder.json
+    response:
+      status_code: 200
+
+  - name: Test the /order GET request to get order by id
+    request:
+      method: GET
+      url: "{base_url}/store/order/10"
+    response:
+      status_code: 200
+      body:
+        id: 10
+        petId: 198772
+        quantity: 7
+
+  - name: Test the /order DELETE request to delete order by id
+    request:
+      method: DELETE
+      url: "{base_url}/store/order/10"
+    response:
+      status_code: 200
+
+  - name: Check /order GET request for deleted oder
+    request:
+      method: GET
+      url: "{base_url}/store/order/10"
+    response:
+      status_code: 404
